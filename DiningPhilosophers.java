@@ -4,8 +4,7 @@
  *
  * @author Serguei A. Mokhov, mokhov@cs.concordia.ca
  */
-public class DiningPhilosophers
-{
+public class DiningPhilosophers {
 	/*
 	 * ------------
 	 * Data members
@@ -37,16 +36,54 @@ public class DiningPhilosophers
 	/**
 	 * Main system starts up right here
 	 */
-	public static void main(String[] argv)
-	{
-		try
-		{
+	public static void main(String[] argv) {
+		try {
 			/*
 			 * TODO:
 			 * Should be settable from the command line
 			 * or the default if no arguments supplied.
 			 */
 			int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+			//
+			/**
+			 * the user can enter a number on the command which will be stored in argv[] and
+			 * used to change
+			 * the value of iPhilosopher
+			 */
+			if (argv.length > 0) {
+				try {
+					// check if the number is a decimal
+					if (argv[0].contains(".")) {
+						System.out.println("java DiningPhilosophers -" + argv[0]);
+						System.out.println(argv[0] + " is not a positive decimal integer .");
+						System.exit(0);
+					}
+
+					int number = Integer.parseInt(argv[0]);
+					// if the number is zero
+					if (number == 0) {
+						System.out.println(argv[0] + " is a zero.");
+						System.exit(0);
+
+					}
+					// check if the number is a negative integer
+					if (number < 0) {
+						System.out.println(argv[0] + " is not a positive integer number.");
+						System.exit(0);
+					}
+
+					else {
+						iPhilosophers = number;
+					}
+
+				}
+				// if anything other than a number is entered
+				catch (NumberFormatException e) {
+					System.out.println(argv[0] + " is a string.");
+					System.out.println("\nUsage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS]");
+					System.exit(0);
+				}
+			} // end if
 
 			// Make the monitor aware of how many philosophers there are
 			soMonitor = new Monitor(iPhilosophers);
@@ -55,27 +92,22 @@ public class DiningPhilosophers
 			Philosopher aoPhilosophers[] = new Philosopher[iPhilosophers];
 
 			// Let 'em sit down
-			for(int j = 0; j < iPhilosophers; j++)
-			{
+			for (int j = 0; j < iPhilosophers; j++) {
 				aoPhilosophers[j] = new Philosopher();
 				aoPhilosophers[j].start();
 			}
 
-			System.out.println
-			(
-				iPhilosophers +
-				" philosopher(s) came in for a dinner."
-			);
+			System.out.println(
+					iPhilosophers +
+							" philosopher(s) came in for a dinner.");
 
 			// Main waits for all its children to die...
 			// I mean, philosophers to finish their dinner.
-			for(int j = 0; j < iPhilosophers; j++)
+			for (int j = 0; j < iPhilosophers; j++)
 				aoPhilosophers[j].join();
 
 			System.out.println("All philosophers have left. System terminates normally.");
-		}
-		catch(InterruptedException e)
-		{
+		} catch (InterruptedException e) {
 			System.err.println("main():");
 			reportException(e);
 			System.exit(1);
@@ -84,10 +116,10 @@ public class DiningPhilosophers
 
 	/**
 	 * Outputs exception information to STDERR
+	 * 
 	 * @param poException Exception object to dump to STDERR
 	 */
-	public static void reportException(Exception poException)
-	{
+	public static void reportException(Exception poException) {
 		System.err.println("Caught exception : " + poException.getClass().getName());
 		System.err.println("Message          : " + poException.getMessage());
 		System.err.println("Stack Trace      : ");
